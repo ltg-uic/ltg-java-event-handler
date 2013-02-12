@@ -19,15 +19,16 @@ public class AsynchronousLTGEventHandler {
 	public static void main(String[] args) {
 
 		// We start by creating the event handler
-		LTGEventHandler eh = new LTGEventHandler("fg-test@ltg.evl.uic.edu", "fg-test", "fg-pilot-oct12@conference.ltg.evl.uic.edu");
+		final LTGEventHandler eh = new LTGEventHandler("fg-master@ltg.evl.uic.edu", "fg-master", "fg-pilot-oct12@conference.ltg.evl.uic.edu");
 
-		// Then we can add all the listeners
+		// Then we can add all the listeners.
+		// Here we add one for a simple event with no payload
+		// {"event": "event_a", "payload": {} }
 		eh.registerHandler("event_a", new LTGEventListener() {
 			public void processEvent(LTGEvent e) {
-				// Process event
-				e.getDestination();
+				eh.generateEvent(e);
 			}
-		});		
+		});				
 
 		// Once we are done registering the listeners we can actually start 
 		// to listen for events and handle them 
@@ -42,14 +43,8 @@ public class AsynchronousLTGEventHandler {
 			}
 		}
 
-		// NOTE: unless the main thread is suspended we will never get to this point
-
-
-		// That's it!
-
-		// To generate an event, use one of the following methods
-		//eh.generateEvent(event)
-		//eh.generatePrivateEvent(event);
+		// NOTE: unless the main thread is suspended we will 
+		// never get to this point in the code 
 	}
 
 }

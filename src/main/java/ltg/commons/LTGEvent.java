@@ -4,22 +4,28 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class LTGEvent {
 	
-	private String type;
+	private String event;
 	private String origin = null;
 	private String destination = null;
 	private JsonNode payload = null;
 	
 	
-	public LTGEvent(String type, String origin, String destination, JsonNode payload) {
-		this.type = type;
+	public LTGEvent(String event, String origin, String destination, JsonNode payload) {
+		this.event = event;
 		this.origin = origin;
 		this.destination = destination;
+		this.payload = payload;
+	}
+	
+	
+	public LTGEvent(String event, JsonNode payload) {
+		this.event = event;
 		this.payload = payload;
 	}
 
 
 	public String getType() {
-		return type;
+		return event;
 	}
 	
 	
@@ -40,7 +46,13 @@ public class LTGEvent {
 	
 	@Override
 	public String toString() {
-		return "[" + type + "] from: " + origin + ", to: " + destination + " " + payload.asText();
+		String es = "[" + event + "] ";
+		if (origin!=null)
+			es = es + "from:" + origin + " ";
+		if (destination!=null)
+			es = es + "to:" + destination + " ";
+		es = es + payload.toString();
+		return es;
 	}
 
 }

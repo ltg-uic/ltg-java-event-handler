@@ -47,7 +47,7 @@ public class LTGEventHandler {
 		// wait for a message to arrive...
 		while (!Thread.currentThread().isInterrupted()) {
 			// ... and process it ...
-			processMessage(sc.nextMessage());
+			processEvent(sc.nextMessage());
 		}
 		// ... and finally disconnect
 		sc.disconnect();
@@ -55,9 +55,10 @@ public class LTGEventHandler {
 
 
 	public void runAsynchronously() {
+		printRegisteredListeners();
 		sc.registerEventListener(new MessageListener() {
 			public void processMessage(Message m) {
-				processMessage(m);
+				processEvent(m);
 			}
 		});
 	}
@@ -74,7 +75,7 @@ public class LTGEventHandler {
 	
 	
 	public void generateEvent(String event, String destination, JsonNode payload) {
-		generateEvent(new LTGEvent(event, sc.getId(), destination, payload));
+		generateEvent(new LTGEvent(event, sc.getUsername(), destination, payload));
 	}
 
 
@@ -84,23 +85,23 @@ public class LTGEventHandler {
 
 	
 	public void generatePrivateEvent(String event, String destination, JsonNode payload) {
-		generateEvent(new LTGEvent(event, sc.getId(), destination, payload));
+		generateEvent(new LTGEvent(event, sc.getUsername(), destination, payload));
 	}
 
 	
-	private void processMessage(Message m) {
+	private void processEvent(Message m) {
 		// Parse JSON
 		LTGEvent event = null;
 		try {
 			event = deserializeEvent(m.getBody());
 		} catch (Exception e) {
-			// Not JSON, ignore and return
+			// Not JSON or wrong format, ignore and return
 			return;
 		}
 		// Process event
 		LTGEventListener el;
 		if (event!=null) {
-			el = listeners.get(event.getPayload());
+			el = listeners.get(event.getType());
 			if (el!=null)
 				el.processEvent(event);
 		}
@@ -120,21 +121,29 @@ public class LTGEventHandler {
 
 
 	// This method deserializes JSON into an object
-	private LTGEvent deserializeEvent(String json) throws Exception {
+	private LTGEvent deserializeEvent(String json) throws IOException, NotAnLTGEventException {
 		// Parse JSON
 		JsonNode jn = null;
 		try {
 			jn = jsonParser.readTree(json);
 		} catch (JsonProcessingException e) {
 			// Not JSON
-			throw new Exception();
+			throw new IOException();
 		} catch (IOException e) {
 			// Not JSON
-			throw new Exception();
+			throw new IOException();
 		}
+		String event = jn.path("event").textValue();
+		String origin = jn.path("origin").textValue();
+		String destination = jn.path("destination").textValue();
+		JsonNode payload = jn.path("payload");
+		// Validate fields
+		if(event==null || event.isEmpty()) 
+			throw new NotAnLTGEventException();
+		if (payload==null)
+			throw new NotAnLTGEventException();
 		// Create and return event
-		return new LTGEvent(jn.path("event").textValue(), jn.path("origin").textValue(), 
-				jn.path("origin").textValue(), jn.path("payload"));
+		return new LTGEvent(event, origin, destination, payload);
 	}
 	
 	
