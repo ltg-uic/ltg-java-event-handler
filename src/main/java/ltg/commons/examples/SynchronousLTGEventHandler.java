@@ -24,7 +24,7 @@ public class SynchronousLTGEventHandler {
 		// Then we can add all the listeners
 		eh.registerHandler("event_a", new LTGEventListener() {
 			public void processEvent(LTGEvent e) {
-				// Process event
+				// Process this event with empty payload
 				e.getDestination();
 			}
 		});		

@@ -11,7 +11,6 @@ public class LTGEvent {
 	
 	
 	public LTGEvent(String type, String origin, String destination, JsonNode payload) {
-		super();
 		this.type = type;
 		this.origin = origin;
 		this.destination = destination;
