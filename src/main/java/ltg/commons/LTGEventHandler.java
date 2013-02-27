@@ -116,7 +116,7 @@ public class LTGEventHandler {
 		if (e.getDestination()!=null)
 			json.put("destination", e.getDestination());
 		json.put("payload", e.getPayload());
-		return json.asText();
+		return json.toString();
 	}
 
 
@@ -150,9 +150,9 @@ public class LTGEventHandler {
 	private void printRegisteredListeners() {
 		String registeredListeners = " ";
 		for (String s: listeners.keySet())
-			registeredListeners = registeredListeners + s + " ";
+			registeredListeners = registeredListeners + s + ", ";
 		System.out.print("Listening for events of type [");
-		System.out.print(registeredListeners+"]\n");
+		System.out.print(registeredListeners.substring(0, registeredListeners.length()-2)+" ]\n");
 	}
 
 }
