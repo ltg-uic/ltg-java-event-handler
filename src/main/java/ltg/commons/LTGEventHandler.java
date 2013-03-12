@@ -67,46 +67,72 @@ public class LTGEventHandler {
 		sc.disconnect();
 	}
 
-
+	
+	/**
+	 * Generates a public event that is either broadcasted to the whole group chat
+	 * or addressd to a specific agent or client.
+	 * 
+	 * @param e the event
+	 */
 	public void generateEvent(LTGEvent e) {
 		sc.sendMessage(serializeEvent(e));
 	}
 	
 	
+	/**
+	 * Generates a public event that is broadcasted to the whole group chat.
+	 * 
+	 * @param event
+	 * @param payload
+	 */
+	public void generateEvent(String event, JsonNode payload) {
+		generateEvent(new LTGEvent(event, sc.getUsername(), null, payload));
+	}
+	
+	
+	/**
+	 * Generates a public event that is addressed to a particular agent or client.
+	 * 
+	 * @param event
+	 * @param destination
+	 * @param payload
+	 */
 	public void generateEvent(String event, String destination, JsonNode payload) {
 		generateEvent(new LTGEvent(event, sc.getUsername(), destination, payload));
 	}
 
 
+	/**
+	 * Generates a point-to-point event that is sent to a particular client
+	 * off the public group chat.
+	 * 
+	 * @param destination
+	 * @param e
+	 */
 	public void generatePrivateEvent(String destination, LTGEvent e) {
 		sc.sendMessage(destination, serializeEvent(e));
 	}
 
 	
+	/**
+	 * Generates a point-to-point event that is sent to a particular client
+	 * off the public group chat.
+	 * 
+	 * @param event
+	 * @param destination
+	 * @param payload
+	 */
 	public void generatePrivateEvent(String event, String destination, JsonNode payload) {
-		generateEvent(new LTGEvent(event, sc.getUsername(), destination, payload));
+		generatePrivateEvent(destination, new LTGEvent(event, sc.getUsername(), destination, payload));
 	}
 
 	
-	private void processEvent(Message m) {
-		// Parse JSON
-		LTGEvent event = null;
-		try {
-			event = deserializeEvent(m.getBody());
-		} catch (Exception e) {
-			// Not JSON or wrong format, ignore and return
-			return;
-		}
-		// Process event
-		LTGEventListener el;
-		if (event!=null) {
-			el = listeners.get(event.getType());
-			if (el!=null)
-				el.processEvent(event);
-		}
-	}
-
-
+	/**
+	 * Serializes a <code>LTGEvent</code> object into JSON.
+	 * 
+	 * @param e
+	 * @return
+	 */
 	public static String serializeEvent(LTGEvent e) {
 		ObjectNode json = new ObjectMapper().createObjectNode();
 		json.put("event", e.getType());
@@ -119,7 +145,14 @@ public class LTGEventHandler {
 	}
 
 
-	// This method deserializes JSON into an object
+	/**
+	 * De-serializes JSON into a <code>LTGEvent</code> object.
+	 * 
+	 * @param json
+	 * @return
+	 * @throws IOException
+	 * @throws NotAnLTGEventException
+	 */
 	public static LTGEvent deserializeEvent(String json) throws IOException, NotAnLTGEventException {
 		// Parse JSON
 		JsonNode jn = null;
@@ -144,6 +177,25 @@ public class LTGEventHandler {
 			throw new NotAnLTGEventException();
 		// Create and return event
 		return new LTGEvent(event, origin, destination, payload);
+	}
+	
+	
+	private void processEvent(Message m) {
+		// Parse JSON
+		LTGEvent event = null;
+		try {
+			event = deserializeEvent(m.getBody());
+		} catch (Exception e) {
+			// Not JSON or wrong format, ignore and return
+			return;
+		}
+		// Process event
+		LTGEventListener el;
+		if (event!=null) {
+			el = listeners.get(event.getType());
+			if (el!=null)
+				el.processEvent(event);
+		}
 	}
 	
 	

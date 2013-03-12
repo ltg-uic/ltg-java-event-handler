@@ -18,12 +18,6 @@ public class LTGEvent implements Serializable {
 		this.destination = destination;
 		this.payload = payload;
 	}
-	
-	
-	public LTGEvent(String event, JsonNode payload) {
-		this.event = event;
-		this.payload = payload;
-	}
 
 
 	public String getType() {
