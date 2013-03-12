@@ -1,8 +1,10 @@
 package ltg.commons;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class LTGEvent {
+public class LTGEvent implements Serializable {
 	
 	private String event;
 	private String origin = null;
