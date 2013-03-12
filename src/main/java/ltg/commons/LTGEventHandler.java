@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class LTGEventHandler {
 
 	private SimpleXMPPClient sc = null;
-	private ObjectMapper jsonParser = new ObjectMapper();
 	private Map<String, LTGEventListener> listeners = new HashMap<String, LTGEventListener>();
 
 
@@ -108,7 +107,7 @@ public class LTGEventHandler {
 	}
 
 
-	private String serializeEvent(LTGEvent e) {
+	public static String serializeEvent(LTGEvent e) {
 		ObjectNode json = new ObjectMapper().createObjectNode();
 		json.put("event", e.getType());
 		if (e.getOrigin()!=null)
@@ -121,9 +120,10 @@ public class LTGEventHandler {
 
 
 	// This method deserializes JSON into an object
-	private LTGEvent deserializeEvent(String json) throws IOException, NotAnLTGEventException {
+	public static LTGEvent deserializeEvent(String json) throws IOException, NotAnLTGEventException {
 		// Parse JSON
 		JsonNode jn = null;
+		ObjectMapper jsonParser = new ObjectMapper();
 		try {
 			jn = jsonParser.readTree(json);
 		} catch (JsonProcessingException e) {
@@ -151,8 +151,12 @@ public class LTGEventHandler {
 		String registeredListeners = " ";
 		for (String s: listeners.keySet())
 			registeredListeners = registeredListeners + s + ", ";
+		if (registeredListeners.length()>3) {
 		System.out.print("Listening for events of type [");
 		System.out.print(registeredListeners.substring(0, registeredListeners.length()-2)+" ]\n");
+		} else {
+			System.out.print("Listening for events of type [ ]");
+		}
 	}
 
 }
