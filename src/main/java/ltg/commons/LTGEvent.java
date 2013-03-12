@@ -5,6 +5,8 @@ import java.io.Serializable;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class LTGEvent implements Serializable {
+	// Needed for serializable
+	private static final long serialVersionUID = 954867594050013588L;
 	
 	private String event;
 	private String origin = null;

@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.jivesoftware.smack.packet.Message;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -155,17 +154,8 @@ public class LTGEventHandler {
 	 */
 	public static LTGEvent deserializeEvent(String json) throws IOException, NotAnLTGEventException {
 		// Parse JSON
-		JsonNode jn = null;
 		ObjectMapper jsonParser = new ObjectMapper();
-		try {
-			jn = jsonParser.readTree(json);
-		} catch (JsonProcessingException e) {
-			// Not JSON
-			throw new IOException();
-		} catch (IOException e) {
-			// Not JSON
-			throw new IOException();
-		}
+		JsonNode jn = jsonParser.readTree(json);
 		String event = jn.path("event").textValue();
 		String origin = jn.path("origin").textValue();
 		String destination = jn.path("destination").textValue();
