@@ -1,4 +1,4 @@
-package ltg.commons;
+package ltg.commons.ltg_handler;
 
 import java.io.Serializable;
 

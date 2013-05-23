@@ -1,4 +1,4 @@
-package ltg.commons;
+package ltg.commons.ltg_handler;
 
 public class NotAnLTGEventException extends Exception {
 

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ltg</groupId>
   <artifactId>ltg-java-event-handler</artifactId>
-  <version>1.1</version>
+  <version>1.2</version>
   
   <name>Master agent for HelioRoom</name>
   
@@ -33,6 +33,11 @@
   		<groupId>com.fasterxml.jackson.core</groupId>
   		<artifactId>jackson-databind</artifactId>
   		<version>2.1.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>dom4j</groupId>
+  		<artifactId>dom4j</artifactId>
+  		<version>1.6.1</version>
   	</dependency>
   </dependencies>
 </project>

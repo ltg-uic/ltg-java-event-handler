@@ -1,11 +1,11 @@
 /**
  * 
  */
-package ltg.commons.examples;
+package ltg.commons.ltg_handler.examples;
 
-import ltg.commons.LTGEvent;
-import ltg.commons.LTGEventHandler;
-import ltg.commons.LTGEventListener;
+import ltg.commons.ltg_handler.LTGEvent;
+import ltg.commons.ltg_handler.LTGEventHandler;
+import ltg.commons.ltg_handler.LTGEventListener;
 
 /**
  * @author tebemis

@@ -1,11 +1,14 @@
 /**
  * 
  */
-package ltg.commons;
+package ltg.commons.ltg_handler;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import ltg.commons.MessageListener;
+import ltg.commons.SimpleXMPPClient;
 
 import org.jivesoftware.smack.packet.Message;
 
