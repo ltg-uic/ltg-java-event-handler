@@ -19,7 +19,7 @@ public class AsynchronousPorcupineEventHandler {
 	public static void main(String[] args) {
 
 		// We start by creating the event handler
-		final PorcupineEventHandler eh = new PorcupineEventHandler("gugo@glint", "gugo", "porcupine@conference.glint");
+		final PorcupineEventHandler eh = new PorcupineEventHandler("test@ltg.evl.uic.edu", "test", "test@conference.ltg.evl.uic.edu");
 
 		// Then we can add all the listeners for messages like...
 		// {

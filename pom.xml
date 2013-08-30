@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ltg</groupId>
   <artifactId>ltg-java-event-handler</artifactId>
-  <version>1.4</version>
+  <version>1.4.1</version>
   
   <name>LTG Java event Handler</name>
   
@@ -27,7 +27,7 @@
   	<dependency>
   		<groupId>ltg</groupId>
   		<artifactId>simple-java-xmpp-client</artifactId>
-  		<version>1.5</version>
+  		<version>1.5.1</version>
   	</dependency>
   	<dependency>
   		<groupId>com.fasterxml.jackson.core</groupId>

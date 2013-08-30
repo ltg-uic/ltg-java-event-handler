@@ -19,7 +19,7 @@ public class AsynchronousLTGEventHandler {
 	public static void main(String[] args) {
 
 		// We start by creating the event handler
-		final LTGEventHandler eh = new LTGEventHandler("fg-master@ltg.evl.uic.edu", "fg-master", "fg-pilot-oct12@conference.ltg.evl.uic.edu");
+		final LTGEventHandler eh = new LTGEventHandler("test@ltg.evl.uic.edu", "test", "test-room@conference.ltg.evl.uic.edu");
 
 		// Then we can add all the listeners.
 		// Here we add one for a simple event with no payload
