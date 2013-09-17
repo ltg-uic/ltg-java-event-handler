@@ -212,7 +212,7 @@ public class LTGEventHandler {
 		System.out.print("Listening for events of type [");
 		System.out.print(registeredListeners.substring(0, registeredListeners.length()-2)+" ]\n");
 		} else {
-			System.out.print("Listening for events of type [ ]");
+			System.out.print("Listening for events of type [ ]\n");
 		}
 	}
 
