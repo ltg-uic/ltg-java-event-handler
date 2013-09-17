@@ -4,8 +4,12 @@
 package ltg.commons.ltg_handler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import ltg.commons.MessageListener;
 import ltg.commons.SimpleXMPPClient;
@@ -37,6 +41,12 @@ public class LTGEventHandler {
 
 
 	public void registerHandler(String eventType, LTGEventListener listener) {
+		try {
+			Pattern.compile(eventType);
+		} catch (PatternSyntaxException e) {
+			System.out.println("Invalid event type. If you are writing a regular expression check your syntax. Terminating... ");
+			System.exit(-1);
+		}
 		listeners.put(eventType, listener);
 	}
 
@@ -183,10 +193,12 @@ public class LTGEventHandler {
 			return;
 		}
 		// Process event
-		LTGEventListener el;
+		List<LTGEventListener> els = new ArrayList<LTGEventListener>();
 		if (event!=null) {
-			el = listeners.get(event.getType());
-			if (el!=null)
+			for (String eventSelector : listeners.keySet())
+				if (event.getType().matches(eventSelector))
+					els.add(listeners.get(eventSelector));
+			for (LTGEventListener el : els)
 				el.processEvent(event);
 		}
 	}
