@@ -78,7 +78,7 @@ public class PorcupineEventHandler {
 	 * @param e the event
 	 */
 	public void generateEvent(PorcupineEventFromWakeful e) {
-		sc.sendMessage(serializeEvent(e));
+		sc.sendMUCMessage(serializeEvent(e));
 	}
 
 

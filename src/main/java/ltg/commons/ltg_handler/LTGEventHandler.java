@@ -38,6 +38,16 @@ public class LTGEventHandler {
 	public LTGEventHandler(String fullJid, String password, String chatRoom)  {
 		sc = new SimpleXMPPClient(fullJid, password, chatRoom);
 	}
+	
+	
+	public LTGEventHandler(String fullJid, String password, List<String> chatRooms)  {
+		sc = new SimpleXMPPClient(fullJid, password, chatRooms);
+	}
+	
+	
+	public String getId() {
+		return sc.getUsername();
+	}
 
 
 	public void registerHandler(String eventType, LTGEventListener listener) {
@@ -81,13 +91,39 @@ public class LTGEventHandler {
 
 	
 	/**
+	 * Generates a public event within a specific group chat. 
+	 * The event can be addressed to a specific client
+	 * or simply a broadcast.
+	 * 
+	 * @param chatroom the chatroom the event is generated in
+	 * @param e the event
+	 */
+	public void generateEvent(String chatroom, LTGEvent e) {
+		sc.sendMUCMessage(chatroom, serializeEvent(e));
+	}
+	
+	
+	/**
+	 * Generates a public event that is broadcasted to a 
+	 * specific chat room.
+	 * 
+	 * @param chatroom the chatroom the event is generated in
+	 * @param event
+	 * @param payload
+	 */
+	public void generateEvent(String chatroom, String event, JsonNode payload) {
+		generateEvent(chatroom, new LTGEvent(event, null, null, payload));
+	}
+	
+	
+	/**
 	 * Generates a public event that is either broadcasted to the whole group chat
 	 * or addressd to a specific agent or client.
 	 * 
 	 * @param e the event
 	 */
 	public void generateEvent(LTGEvent e) {
-		sc.sendMessage(serializeEvent(e));
+		sc.sendMUCMessage(serializeEvent(e));
 	}
 	
 	
@@ -98,21 +134,9 @@ public class LTGEventHandler {
 	 * @param payload
 	 */
 	public void generateEvent(String event, JsonNode payload) {
-		generateEvent(new LTGEvent(event, sc.getUsername(), null, payload));
+		generateEvent(new LTGEvent(event, null, null, payload));
 	}
 	
-	
-	/**
-	 * Generates a public event that is addressed to a particular agent or client.
-	 * 
-	 * @param event
-	 * @param destination
-	 * @param payload
-	 */
-	public void generateEvent(String event, String destination, JsonNode payload) {
-		generateEvent(new LTGEvent(event, sc.getUsername(), destination, payload));
-	}
-
 
 	/**
 	 * Generates a point-to-point event that is sent to a particular client
