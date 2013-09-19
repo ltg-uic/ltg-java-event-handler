@@ -50,7 +50,7 @@ public class LTGEventHandler {
 	}
 
 
-	public void registerHandler(String eventType, LTGEventListener listener) {
+	public synchronized void registerHandler(String eventType, LTGEventListener listener) {
 		try {
 			Pattern.compile(eventType);
 		} catch (PatternSyntaxException e) {
@@ -207,7 +207,7 @@ public class LTGEventHandler {
 	}
 	
 	
-	private void processEvent(Message m) {
+	private synchronized void processEvent(Message m) {
 		// Parse JSON
 		LTGEvent event = null;
 		try {
@@ -228,7 +228,7 @@ public class LTGEventHandler {
 	}
 	
 	
-	private void printRegisteredListeners() {
+	private synchronized void printRegisteredListeners() {
 		String registeredListeners = " ";
 		for (String s: listeners.keySet())
 			registeredListeners = registeredListeners + s + ", ";
