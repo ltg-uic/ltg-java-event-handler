@@ -1,4 +1,4 @@
-package ltg.commons.porcupine_handler;
+package ltg.commons.porcupine_event_handler;
 
 public class NotAPorcupineEventFromXMPPException extends Exception {
 

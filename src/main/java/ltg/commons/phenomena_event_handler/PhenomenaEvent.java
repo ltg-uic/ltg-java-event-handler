@@ -1,4 +1,4 @@
-package ltg.commons.phenomena_handler;
+package ltg.commons.phenomena_event_handler;
 
 import org.dom4j.Element;
 

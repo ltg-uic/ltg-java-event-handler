@@ -1,4 +1,4 @@
-package ltg.commons.phenomena_handler;
+package ltg.commons.phenomena_event_handler;
 
 import java.util.HashMap;
 import java.util.Map;

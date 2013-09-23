@@ -1,20 +1,20 @@
 /**
  * 
  */
-package ltg.commons.ltg_handler.examples;
+package ltg.commons.ltg_event_handler.examples;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ltg.commons.ltg_handler.LTGEvent;
-import ltg.commons.ltg_handler.MultiLTGEventHandler;
-import ltg.commons.ltg_handler.MultiLTGEventListener;
+import ltg.commons.ltg_event_handler.LTGEvent;
+import ltg.commons.ltg_event_handler.MultiChatLTGEventHandler;
+import ltg.commons.ltg_event_handler.MultiChatLTGEventListener;
 
 /**
  * @author tebemis
  *
  */
-public class SynchronousMultiChatroomLTGEventHandler {
+public class SynchronousMultiChatLTGEventHandler {
 
 	/**
 	 * @param args
@@ -25,12 +25,12 @@ public class SynchronousMultiChatroomLTGEventHandler {
 		List<String> chatrooms = new ArrayList<String>();
 		chatrooms.add("test-room-1@conference.ltg.evl.uic.edu");
 		chatrooms.add("test-room-2@conference.ltg.evl.uic.edu");
-		final MultiLTGEventHandler eh = new MultiLTGEventHandler("test-bot@ltg.evl.uic.edu", "test-bot", chatrooms);
+		final MultiChatLTGEventHandler eh = new MultiChatLTGEventHandler("test-bot@ltg.evl.uic.edu", "test-bot", chatrooms);
 
 		// Then we can add all the listeners.
-		// Here we add an echo for a simple event with no payload
-		// {"event": "event_a", "payload": {} }
-		eh.registerHandler("test_event", new MultiLTGEventListener() {
+		// Here we add one for a simple event with no payload
+		// {"event": "test_event", "payload": {} }
+		eh.registerHandler("test_event", new MultiChatLTGEventListener() {
 			public void processEvent(String chatroom, LTGEvent e) { 
 				System.out.println("Received event " + e.getEventType() + " from " + chatroom);
 			}

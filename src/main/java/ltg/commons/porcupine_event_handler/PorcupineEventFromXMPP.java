@@ -1,4 +1,4 @@
-package ltg.commons.porcupine_handler;
+package ltg.commons.porcupine_event_handler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

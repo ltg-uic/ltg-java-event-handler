@@ -1,11 +1,11 @@
 /**
  * 
  */
-package ltg.commons.porcupine_handler.examples;
+package ltg.commons.porcupine_event_handler.examples;
 
-import ltg.commons.porcupine_handler.PorcupineEventFromXMPP;
-import ltg.commons.porcupine_handler.PorcupineEventHandler;
-import ltg.commons.porcupine_handler.PorcupineEventListener;
+import ltg.commons.porcupine_event_handler.PorcupineEventFromXMPP;
+import ltg.commons.porcupine_event_handler.PorcupineEventHandler;
+import ltg.commons.porcupine_event_handler.PorcupineEventListener;
 
 /**
  * @author tebemis

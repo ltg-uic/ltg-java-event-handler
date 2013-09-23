@@ -1,4 +1,4 @@
-package ltg.commons.ltg_handler;
+package ltg.commons.ltg_event_handler;
 
 import java.io.IOException;
 
@@ -6,6 +6,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * A POJO class to represent an LTG event.
+ * The class includes utility methods to serialize and 
+ * de-serialize events to/from JSON strings.
+ * 
+ * @author gugo
+ */
 public class LTGEvent {
 
 	private String event;
@@ -55,10 +62,10 @@ public class LTGEvent {
 
 
 	/**
-	 * Serializes a <code>LTGEvent</code> object into JSON.
+	 * Serializes a <code>LTGEvent</code> object into a JSON string.
 	 * 
-	 * @param e
-	 * @return
+	 * @param e the LTGevent that needs to be serialized
+	 * @return a JSON string representing the LTGEvent 
 	 */
 	public static String serializeEvent(LTGEvent e) {
 		ObjectNode json = new ObjectMapper().createObjectNode();
@@ -73,11 +80,11 @@ public class LTGEvent {
 
 
 	/**
-	 * De-serializes JSON into a <code>LTGEvent</code> object.
+	 * De-serializes a JSON string into a <code>LTGEvent</code> object.
 	 * 
-	 * @param json
-	 * @return
-	 * @throws IOException
+	 * @param the JSON string representation of the object
+	 * @return and LTGEvent representing the event
+	 * @throws IOException 
 	 * @throws NotAnLTGEventException
 	 */
 	public static LTGEvent deserializeEvent(String json) throws IOException, NotAnLTGEventException {

@@ -1,4 +1,4 @@
-package ltg.commons.phenomena_handler;
+package ltg.commons.phenomena_event_handler;
 
 import java.io.IOException;
 import java.io.StringWriter;
