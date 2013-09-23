@@ -1,12 +1,6 @@
-/**
- * 
- */
 package ltg.commons.ltg_handler;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -17,40 +11,22 @@ import ltg.commons.SimpleXMPPClient;
 import org.jivesoftware.smack.packet.Message;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
-/**
- * @author tebemis
- *
- */
-public class LTGEventHandler {
-
-	private SimpleXMPPClient sc = null;
-	private Map<String, LTGEventListener> listeners = new HashMap<String, LTGEventListener>();
-
-
-	public LTGEventHandler(String fullJid, String password) {
-		sc = new SimpleXMPPClient(fullJid, password);
-	}
-
-
-	public LTGEventHandler(String fullJid, String password, String chatRoom)  {
-		sc = new SimpleXMPPClient(fullJid, password, chatRoom);
-	}
+public abstract class LTGEventHandler {
+	
+	protected SimpleXMPPClient sc = null;
+	// Event listeners
+	protected Map<String, LTGEventListener> listeners = new HashMap<String, LTGEventListener>();
 	
 	
-	public LTGEventHandler(String fullJid, String password, List<String> chatRooms)  {
-		sc = new SimpleXMPPClient(fullJid, password, chatRooms);
-	}
-	
-	
-	public String getId() {
-		return sc.getUsername();
-	}
-
-
-	public synchronized void registerHandler(String eventType, LTGEventListener listener) {
+	/**
+	 * Utility method that registers a listener for a particular event or
+	 * a pattern specified using regular expressions.
+	 * 
+	 * @param eventType the event or patter that will activate the listener
+	 * @param listener the callback in charge of performing the action when the pattern is matched
+	 */
+	protected synchronized void registerHandler(String eventType, LTGEventListener listener) {
 		try {
 			Pattern.compile(eventType);
 		} catch (PatternSyntaxException e) {
@@ -59,8 +35,24 @@ public class LTGEventHandler {
 		}
 		listeners.put(eventType, listener);
 	}
+	
+	
+	/**
+	 * TODO
+	 */
+	public void runAsynchronously() {
+		printRegisteredListeners();
+		sc.registerEventListener(new MessageListener() {
+			public void processMessage(Message m) {
+				processEvent(m);
+			}
+		});
+	}
 
 
+	/**
+	 * TODO
+	 */
 	public void runSynchronously() {
 		printRegisteredListeners();
 		// We are now connected and in the group chat room. If we don't do something
@@ -73,46 +65,23 @@ public class LTGEventHandler {
 		// ... and finally disconnect
 		sc.disconnect();
 	}
-
-
-	public void runAsynchronously() {
-		printRegisteredListeners();
-		sc.registerEventListener(new MessageListener() {
-			public void processMessage(Message m) {
-				processEvent(m);
-			}
-		});
+	
+	
+	/**
+	 * TODO
+	 * 
+	 * @return
+	 */
+	public String getId() {
+		return sc.getUsername();
 	}
-
-
+	
+	
+	/**
+	 * TODO
+	 */
 	public void close() {
 		sc.disconnect();
-	}
-
-	
-	/**
-	 * Generates a public event within a specific group chat. 
-	 * The event can be addressed to a specific client
-	 * or simply a broadcast.
-	 * 
-	 * @param chatroom the chatroom the event is generated in
-	 * @param e the event
-	 */
-	public void generateEvent(String chatroom, LTGEvent e) {
-		sc.sendMUCMessage(chatroom, serializeEvent(e));
-	}
-	
-	
-	/**
-	 * Generates a public event that is broadcasted to a 
-	 * specific chat room.
-	 * 
-	 * @param chatroom the chatroom the event is generated in
-	 * @param event
-	 * @param payload
-	 */
-	public void generateEvent(String chatroom, String event, JsonNode payload) {
-		generateEvent(chatroom, new LTGEvent(event, null, null, payload));
 	}
 	
 	
@@ -123,7 +92,7 @@ public class LTGEventHandler {
 	 * @param e the event
 	 */
 	public void generateEvent(LTGEvent e) {
-		sc.sendMUCMessage(serializeEvent(e));
+		sc.sendMUCMessage(LTGEvent.serializeEvent(e));
 	}
 	
 	
@@ -146,7 +115,7 @@ public class LTGEventHandler {
 	 * @param e
 	 */
 	public void generatePrivateEvent(String destination, LTGEvent e) {
-		sc.sendMessage(destination, serializeEvent(e));
+		sc.sendMessage(destination, LTGEvent.serializeEvent(e));
 	}
 
 	
@@ -158,86 +127,32 @@ public class LTGEventHandler {
 	 * @param destination
 	 * @param payload
 	 */
-	public void generatePrivateEvent(String event, String destination, JsonNode payload) {
+	public void generatePrivateEvent(String destination, String event, JsonNode payload) {
 		generatePrivateEvent(destination, new LTGEvent(event, sc.getUsername(), destination, payload));
 	}
-
+	
 	
 	/**
-	 * Serializes a <code>LTGEvent</code> object into JSON.
-	 * 
-	 * @param e
-	 * @return
+	 * TODO
 	 */
-	public static String serializeEvent(LTGEvent e) {
-		ObjectNode json = new ObjectMapper().createObjectNode();
-		json.put("event", e.getType());
-		if (e.getOrigin()!=null)
-			json.put("origin", e.getOrigin());
-		if (e.getDestination()!=null)
-			json.put("destination", e.getDestination());
-		json.put("payload", e.getPayload());
-		return json.toString();
-	}
-
-
-	/**
-	 * De-serializes JSON into a <code>LTGEvent</code> object.
-	 * 
-	 * @param json
-	 * @return
-	 * @throws IOException
-	 * @throws NotAnLTGEventException
-	 */
-	public static LTGEvent deserializeEvent(String json) throws IOException, NotAnLTGEventException {
-		// Parse JSON
-		ObjectMapper jsonParser = new ObjectMapper();
-		JsonNode jn = jsonParser.readTree(json);
-		String event = jn.path("event").textValue();
-		String origin = jn.path("origin").textValue();
-		String destination = jn.path("destination").textValue();
-		JsonNode payload = jn.path("payload");
-		// Validate fields
-		if(event==null || event.isEmpty()) 
-			throw new NotAnLTGEventException();
-		if (payload==null)
-			throw new NotAnLTGEventException();
-		// Create and return event
-		return new LTGEvent(event, origin, destination, payload);
-	}
-	
-	
-	private synchronized void processEvent(Message m) {
-		// Parse JSON
-		LTGEvent event = null;
-		try {
-			event = deserializeEvent(m.getBody());
-		} catch (Exception e) {
-			// Not JSON or wrong format, ignore and return
-			return;
-		}
-		// Process event
-		List<LTGEventListener> els = new ArrayList<LTGEventListener>();
-		if (event!=null) {
-			for (String eventSelector : listeners.keySet())
-				if (event.getType().matches(eventSelector))
-					els.add(listeners.get(eventSelector));
-			for (LTGEventListener el : els)
-				el.processEvent(event);
-		}
-	}
-	
-	
-	private synchronized void printRegisteredListeners() {
+	protected synchronized void printRegisteredListeners() {
 		String registeredListeners = " ";
 		for (String s: listeners.keySet())
 			registeredListeners = registeredListeners + s + ", ";
 		if (registeredListeners.length()>3) {
-		System.out.print("Listening for events of type [");
-		System.out.print(registeredListeners.substring(0, registeredListeners.length()-2)+" ]\n");
+			System.out.print("Listening for events of type [");
+			System.out.print(registeredListeners.substring(0, registeredListeners.length()-2)+" ]\n");
 		} else {
 			System.out.print("Listening for events of type [ ]\n");
 		}
 	}
-
+	
+	
+	/**
+	 * TODO
+	 * 
+	 * @param m
+	 */
+	protected abstract void processEvent(Message m);
+	
 }

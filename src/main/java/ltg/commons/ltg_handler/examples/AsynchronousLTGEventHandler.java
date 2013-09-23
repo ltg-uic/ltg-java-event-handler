@@ -4,8 +4,8 @@
 package ltg.commons.ltg_handler.examples;
 
 import ltg.commons.ltg_handler.LTGEvent;
-import ltg.commons.ltg_handler.LTGEventHandler;
-import ltg.commons.ltg_handler.LTGEventListener;
+import ltg.commons.ltg_handler.SingleLTGEventHandler;
+import ltg.commons.ltg_handler.SingleLTGEventListener;
 
 /**
  * @author tebemis
@@ -19,12 +19,12 @@ public class AsynchronousLTGEventHandler {
 	public static void main(String[] args) {
 
 		// We start by creating the event handler
-		final LTGEventHandler eh = new LTGEventHandler("test@ltg.evl.uic.edu", "test", "test-room@conference.ltg.evl.uic.edu");
+		final SingleLTGEventHandler eh = new SingleLTGEventHandler("test@ltg.evl.uic.edu", "test", "test-room@conference.ltg.evl.uic.edu");
 
 		// Then we can add all the listeners.
 		// Here we add one for a simple event with no payload
 		// {"event": "event_a", "payload": {} }
-		eh.registerHandler("event_a", new LTGEventListener() {
+		eh.registerHandler("event_a", new SingleLTGEventListener() {
 			public void processEvent(LTGEvent e) {
 				eh.generateEvent(e);
 			}
