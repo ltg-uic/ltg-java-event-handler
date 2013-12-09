@@ -1,10 +1,12 @@
-# LTG/SAIL event handler
+# LTG/S3 event handler
+[![Build Status](https://travis-ci.org/ltg-uic/ltg-java-event-handler.png?branch=master)](https://travis-ci.org/ltg-uic/ltg-java-event-handler)
 
-This libray helps in the process of writing agents in JAVA by assisting with the parsing of the JSON event format that are sent around.
-Wow, what a description I did right there... basically a poet! :)
+This libray makes parsing LTG / S3 events trivial.
 
-## V1.3
-Added support for Peaceful Porcupine events
+Look at examples on how to use it in:
 
-## V1.2
-Added support for phenomena events
+- `ltg.java.commons.ltg_event_handler` for LTG events
+
+-  `ltg.java.commons.phenomena_event_handler` for old LTG events (still using XML, like it's 2001)
+
+- `ltg.java.commons.porcupine_event_handler` for S3 events coming from [https://github.com/educoder/PeacefulPorcupine](PeacefulPorcupine)
