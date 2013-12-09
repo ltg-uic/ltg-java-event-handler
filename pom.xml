@@ -26,7 +26,7 @@
   	<dependency>
   		<groupId>ltg</groupId>
   		<artifactId>simple-java-xmpp-client</artifactId>
-  		<version>2.0.0-alpha1</version>
+  		<version>2.0.0</version>
   	</dependency>
   	<dependency>
   		<groupId>com.fasterxml.jackson.core</groupId>
@@ -39,5 +39,5 @@
   		<version>1.6.1</version>
   	</dependency>
   </dependencies>
-  <version>2.0.0-beta1</version>
+  <version>2.0.0</version>
 </project>
